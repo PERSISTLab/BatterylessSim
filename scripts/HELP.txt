@@ -1,0 +1,76 @@
+Available commands:
+ break <address or symbol>	 add a breakpoint to a given address or symbol
+ checkpt <seg1 addr> <seg2 addr> <cpfunc addr> [logfile pfx] validate checkpoints
+ cycles 			 print cycle counter
+ deathThreshold <voltage>	 set the CPU's minimum-voltage threshold
+ debug [0/1]			 set debug to on or off
+ duty <frequency> <chip> [chips...] add a duty cycle sampler for operating modes to the specified chips
+ echo 				 echo arguments
+ events 			 print event queues
+ exec <cmd> [args...]		 execute the specified command
+ exit 				 exit MSPSim
+ fclose <filename>		 close the specified file
+ files 				 list open files
+ findchkpt 			 find the active checkpoint bundle (if any)
+ gdbstubs port			 open up a gdb stubs server for GDB remote debugging
+ grep [-i] [-v] <regexp>	 print lines matching the specified pattern
+ help [command]			 show help for the specified command or command list
+ hushcap 			 toggle the capacitor's voltage printing
+ info [unit...]			 show information about specified chip/loggable
+ install ClassName [Name]	 install and start a plugin
+ ipstack 			 setup 802.15.4/IP stack
+ kill <process>			 kill a currently executing command
+ line <address or symbol>	 print line number of address/symbol
+ log [loggable...]		 log a loggable object
+ logcalls 			 log function calls
+ logevents [chips...]		 log events
+ mem <start address> <num_entries> [type] [hex|char|dis] dump memory
+ memv <start address> <num_words> [rev] dump memory verbosely
+ mset <address> [type] <value> [value ...] set memory
+ mult [m1...mn]			 multiply line of doubles
+ nocap 				 simulate tethered power (no cap)
+ oracleThreshold <voltage>	 set the oracle's checkpointing threshold
+ pauseOnDie 			 don't automatically start after death
+ print <address or symbol>	 print value of an address or symbol
+ printreg [register]		 print value of an register
+ printtags 			 print tags profile
+ profile [-clear] [-sort column] [-showcallers] [regexp] show profile information
+ profiler <command> <arguments>	 configure profiler
+ ps 				 list current executing commands/processes
+ quit 				 exit MSPSim
+ readbundle <addr>		 print a checkpoint bundle starting at addr
+ readmap 			 read map
+ registers 			 show register contents
+ repeat [-t delay] [-c count] <command line> repeat the specified command line
+ reset 				 reset the CPU
+ resurrectionThreshold <voltage> set the CPU's resurrection threshold
+ rflistener <input|output> <rf-chip> an rflistener
+ service [-f] [class name|service name] [start|stop] handle service plugins
+ set <parameter> <value>	 set a config parameter
+ source [-v] <filename>		 run script
+ speed [factor]			 set the speed factor for the CPU
+ stack 				 show stack info
+ stackprof 			 Start stack profiler
+ stacktrace 			 show stack trace
+ start 				 start the CPU
+ step [number of instructions]	 single step the CPU
+ stepmicro <micro skip> <micro step> single the CPU specified no micros
+ stop 				 stop the CPU
+ symbol <regexp>		 list matching symbols
+ sysinfo [-registry] [-config]	 show info about the MSPSim system
+ tagprof 			 profile between two events
+ tee <filename>			 redirect to file and standard out
+ throw [message]		 throw an Emulation Exception
+ time 				 print the elapse time and cycles
+ timestamp [-c]			 print lines prefixed with timestamp as milliseconds or CPU cycles
+ trace [trace size | show]	 store a trace of execution positions.
+ trig <command>			 trigg command when getting input
+ tspstart <server> <user> <password> starts a TSP tunnel
+ voltage 			 print the current capacitor voltage
+ watch <address or symbol> [length] [char | hex | break] add a write/read watch to a given address or symbol
+ watchreg <register> [int]	 add a write watch to a given register
+ wclear 			 resets stored window positions
+ window [-close|-clear|-list] [windowname] redirect input to a window
+ workaround 			 activate workaround for Java console input bug
+ xmem <start address> <num_entries> [type] dump flash memory
+ xmset <address> <value> [type]	 set memory

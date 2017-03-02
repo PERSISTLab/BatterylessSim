@@ -1,0 +1,26 @@
+What to do for ASPLOS 2017
+==================
+
+SIMULATOR
+- Goal is to have repeatable simulation environment for evaluation during, and after development of Mayfly
+	- Why? 	During development, this lets us make sure our checkpointing, and timing, and (mainly) scheduler is working propoerly.
+	- What does properly mean? We need to make sure that:
+		* Timestamps are collected right PER data point
+		* Timestamps are updated or changed / adjusted as turn off happens
+		* Checkpoints happen at the right times (when tasks complete) and are valid
+		* The scheduler chooses the best next task
+			- This is based on Mayfly correctly evaluating the collect, misd, and expires constraints
+		* The scheduler / mayfly overhead is low
+
+
+Things to implement for sim in order:
+√ - Get MSPSIM working for a simple MSP430FR6989 program
+√ - Get working for WISP traces to kill the power
+√ - Get output working to show the dead times, Make sure there is a logging or printing mechanism for MSPSIM, so we can trace program execution
+√ - Sine wave voltage trace
+√ - TARDIS hardware component on ADC pin, map to capacitor discharge equation (over 20MΩ resistor, for 1uF)
+√ - TARDIS / CusTARD lookup table, function, and header for these settings (insert ADC, get time in millis)
+√ - Now test keeping accurate time in the simulator (should be near perfect)
+√ - Add in TARDIS functionality to MSPSIM
+- Now try a scheduler: make linker script work with MSPSIM, for custom memory for the data passes and progress through the graph
+- Add in graphing / tracing of program execution, times dead, and the line number it died on, or the mayfly task it died on

@@ -34,6 +34,9 @@ A step by step series of examples that tell you have to get a development env ru
 
 #### For Eclipse:
 
+*You should be able to import the project automatically using the eclipse Import GUI. If not, delete eclipse project files (.classpath, .project) and try the below.*
+
+
 After moving the project into Eclipse, add the necessary libraries to the bulid path by doing the following:
 	
 	1) Right-click on the project in the left menu 
@@ -42,7 +45,14 @@ After moving the project into Eclipse, add the necessary libraries to the bulid 
 	4) Choose "User Libraries..." in the top right
 	5) Create a new user libary that includes the .jar files from the lib file in this project's directory.
 
-To run the project in Eclipse, perform the following:
+To run the project in Eclipse, first build the firmware you want to simulate, for example, from the main directory using a terminal / concolse / cmd:
+
+	cd firmware/moo
+	make
+
+This should execute without errors or warnings if toolchain is setup correctly.
+
+Now setup the Run configuration in eclipse, perform the following:
 
 	1) Go to "Run/Run Configurations" in the menu bar at the top
 	2) Create a new run configuration by clicking the new button in the top left
@@ -118,7 +128,7 @@ See also the list of [contributors](https://github.com/your/project/contributors
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the BSD 3-clause "New" or "Revised" License.
 
 ## Acknowledgments
 

@@ -128,7 +128,7 @@ public class MooNode extends GenericNode implements ADCInput, USARTListener {
 	  // sinusoid w/ 500 Hz frequency
 	  double time_ms = cpu.getTimeMillis();
 	  double sinval = Math.sin(time_ms * Math.PI);
-	  return (int)(sinval * 127); // sinusoid within range of byte
+	  return (int)((sinval+1.0) * 2047); // sinusoid within range of 12-bit adc / 2
   }
 
   @Override

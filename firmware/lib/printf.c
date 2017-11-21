@@ -64,7 +64,7 @@ int io_puts_no_newline(const char *str) {
 
 int io_putchar(int c) {
     while (!(IFG2&UCA0TXIFG));                // USCI_A0 TX buffer ready?
-    UCA0TXBUF = str[i];
+    UCA0TXBUF = c;
     return 0;
 }
 

@@ -39,6 +39,8 @@ int main(void) {
     while ((ADC12IFG & BIT0)==0);
     adc_sample = ADC12MEM0;
     siren_command("PRINTF: ADC Read      %u\r\n", adc_sample);    
+    uint32_t* __w_ptr_argh = (uint32_t*)0x28ff18;
+    *__w_ptr_argh = i;
     __delay_cycles(1000);
   }
   //__bis_SR_register(LPM3_bits);

@@ -1,4 +1,4 @@
-#nocap
+nocap
 debug 0
 timestamp
 hushcap

@@ -109,6 +109,7 @@ public class MSP430Core extends Chip implements MSP430Constants,
   private final ArrayList<IOUnit> ioUnits;
   private final SFR sfr;
   private final Watchdog watchdog;
+  private MPU mpu = null;
   private final ClockSystem bcs;
 
   // From the possible interrupt sources - to be able to indicate is serviced.
@@ -336,7 +337,23 @@ private static final int COVERAGE_BUFFER_MEM = 0x82000;
         		if (address >= MAX_MEM) {
         			throw new EmulationException("Writing outside memory: 0x" + Utils.hex(address, 4));
         		}
-        		memorySegments[address >> 8].write(address, data, mode);
+        		
+        		// Handle MPU settings if exist and enabled
+        		if(mpu != null && mpu.mpuEnabled) {
+        			MPUOperationResult mor = mpu.isValidOperation(address, MPU.MemoryOperation.WRITE);
+        			if(address == 0x4401) {
+        				System.out.println("t");
+        			}
+        			if(mor.error == false) {
+        				memorySegments[address >> 8].write(address, data, mode);
+        			} else {
+        				// trigger error for bad operation, and dont actually write / exec / read
+        				mpu.badOperation(mor);
+        			}
+        		} else {
+        			// No memory protection exists or is not enabled
+        			memorySegments[address >> 8].write(address, data, mode);
+        		}
         	}
         }
         @Override
@@ -395,9 +412,15 @@ private static final int COVERAGE_BUFFER_MEM = 0x82000;
 
     watchdog = new Watchdog(this, config.watchdogOffset);
     ioSegment.setIORange(config.watchdogOffset, 1, watchdog);
-
     ioUnits.add(watchdog);
-
+    
+    // make MPU accesible
+    for (int i = 0; i < ioUnits.size(); i++) {
+		if(ioUnits.get(i).getName().equalsIgnoreCase("mpu")) {
+			mpu = (MPU) ioUnits.get(i);
+			break;
+		}
+	}
     bcs.reset(0);
   }
   

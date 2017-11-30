@@ -57,9 +57,9 @@ public class Exp6989Node extends GenericNode implements ADCInput, USARTListener 
   public static void main (String[] args) throws IOException {
       ArgumentManager config = new ArgumentManager();
       config.handleArguments(args);
-      MooNode node;
+      Exp6989Node node;
 
-      node = new MooNode();
+      node = new Exp6989Node();
       node.setupArgs(config);
   }
 

@@ -27,7 +27,7 @@ SIM_FLAGS			= -D__MSPSIM__
 
 CFLAGS 				= $(CSTD_FLAGS) $(DEBUG_FLAGS) $(ERROR_FLAGS) $(NO_ERROR_FLAGS) $(LIB_INCLUDES) $(MSP430_FLAGS) $(REDUCE_SIZE_FLAGS) $(SIM_FLAGS)
 	 
-LFLAGS = -Wl,--gc-sections -Wl,--reduce-memory-overheads -Wl,--stats -Wl,--relax
+LFLAGS = -Wl,--gc-sections -Wl,--reduce-memory-overheads -Wl,--stats -Wl,--relax -T msp430fr6989.ld
 LIBS = -L $(MSPGCC_ROOT)/../include/
 
 all: compile

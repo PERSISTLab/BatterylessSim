@@ -7,6 +7,7 @@ import se.sics.mspsim.core.ClockSystem;
 import se.sics.mspsim.core.FrClockSystem;
 import se.sics.mspsim.core.IOPort;
 import se.sics.mspsim.core.IOUnit;
+import se.sics.mspsim.core.MPU;
 import se.sics.mspsim.core.MSP430Config;
 import se.sics.mspsim.core.MSP430Core;
 import se.sics.mspsim.core.Multiplier32;
@@ -118,6 +119,11 @@ public class MSP430fr6989Config extends MSP430Config {
 		PMM pmm = new PMM(cpu, cpu.memory, 0x120);
 		cpu.setIORange(0x120, PMM.SIZE, pmm);
 		ioUnits.add(pmm);
+		
+		// MPU
+		MPU mpu = new MPU("mpu", cpu, cpu.memory, 0x05A0);
+		ioUnits.add(mpu);
+		cpu.setIORange(0x05A0, 16, mpu);
         
 		// ADC12_B
 		ADC12_B adc12 = new ADC12_B(cpu);

@@ -62,6 +62,8 @@ Now setup the Run configuration in eclipse, perform the following:
 	5) An example would be as follows:
 		-nogui -exitwhendone -platform=moo firmware/moo/main.out -autorun="scripts/simple.sc"
 
+Other platforms include `wisp, exp6989, senseandsend` the exp6989 platform includes support for the Memory Protection Unit (MPU).
+
 To run a single firmware with multiple IV surfaces, add the arguement -ekhotracedir=<pathtoekhotraces> to the command line arguement.
 
 To run mulitple firmwares with multiple IV surfaces, use the python script in the home directory, runtests.py, as so:

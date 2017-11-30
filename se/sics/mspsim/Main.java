@@ -91,7 +91,7 @@ public class Main {
       if ("wisp".equals(platform)) {
           return "se.sics.mspsim.platform.crfid.WispNode";
       }
-      if ("exp6989".equals(platform)) {
+      if ("exp6989".equalsIgnoreCase(platform)) {
     	  return "se.sics.mspsim.platform.ti.Exp6989Node";
       }
       if ("mayfly".equalsIgnoreCase(platform)) {

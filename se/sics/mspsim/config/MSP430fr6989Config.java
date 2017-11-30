@@ -123,7 +123,8 @@ public class MSP430fr6989Config extends MSP430Config {
 		// MPU
 		MPU mpu = new MPU("mpu", cpu, cpu.memory, 0x05A0);
 		ioUnits.add(mpu);
-		cpu.setIORange(0x05A0, 16, mpu);
+		// Extra register for seg boundary 3
+		cpu.setIORange(0x05A0, 18, mpu);
         
 		// ADC12_B
 		ADC12_B adc12 = new ADC12_B(cpu);

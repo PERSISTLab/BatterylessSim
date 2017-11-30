@@ -19,6 +19,7 @@ public class MPU extends IOUnit {
 	public static final int MPUIPC0            = 0x05AA;
 	public static final int MPUIPSEGB2         = 0x05AC;
 	public static final int MPUIPSEGB1         = 0x05AE;
+	public static final int MPUSEGB3           = 0x05B0;
 	
 	// Masks
 	private static final int MPUENA            = 0x0001;       /* MPU Enable */
@@ -34,6 +35,9 @@ public class MPU extends IOUnit {
 	private static final int MPUSEG3RE         =    0x0100;       /* MPU Main memory Segment 3 Read enable */
 	private static final int MPUSEG3WE         =    0x0200;       /* MPU Main memory Segment 3 Write enable */
 	private static final int MPUSEG3XE         =    0x0400;       /* MPU Main memory Segment 3 Execute enable */
+	private static final int MPUSEG4RE         =    0x0100;       /* MPU Main memory Segment 4 Read enable */
+	private static final int MPUSEG4WE         =    0x0200;       /* MPU Main memory Segment 4 Write enable */
+	private static final int MPUSEG4XE         =    0x0400;       /* MPU Main memory Segment 4 Execute enable */
 	private static final int MPUSEGIRE         =    0x1000;       /* MPU Info memory Segment Read enable */
 	private static final int MPUSEGIWE         =    0x2000;       /* MPU Info memory Segment Write enable */
 	private static final int MPUSEGIXE         =    0x4000;       /* MPU Info memory Segment Execute enable */
@@ -41,6 +45,7 @@ public class MPU extends IOUnit {
 	// Default register values
 	int mpuctl0            = 0x9600;
 	int mpuctl1            = 0x0;
+	int mpusegb3           = 0x0;
 	int mpusegb2           = 0x0;
 	int mpusegb1           = 0x0;
 	int mpusam             = 0x7777;
@@ -79,19 +84,29 @@ public class MPU extends IOUnit {
     		if(op == MemoryOperation.WRITE && (MPUSEG2WE & mpusam) == 0) error = true;
     		if(op == MemoryOperation.READ && (MPUSEG2RE & mpusam) == 0) error = true;
     	} else	// Segment 3
-    	if(address >= (mpusegb2 << 4)) {
+    	if(address >= (mpusegb2 << 4) && address < (mpusegb3 << 4)) {
     		mpuop.segment = 3;
     		if(op == MemoryOperation.EXECUTE && (MPUSEG3XE & mpusam) == 0) error = true;
     		if(op == MemoryOperation.WRITE && (MPUSEG3WE & mpusam) == 0) error = true;
     		if(op == MemoryOperation.READ && (MPUSEG3RE & mpusam) == 0) error = true;
-    	}
+    	} else	// Segment 4
+        if(address >= (mpusegb3 << 4)) {
+       		mpuop.segment = 4;
+       		if(op == MemoryOperation.EXECUTE && (MPUSEG4XE & mpusam) == 0) error = true;
+        	if(op == MemoryOperation.WRITE && (MPUSEG4WE & mpusam) == 0) error = true;
+        	if(op == MemoryOperation.READ && (MPUSEG4RE & mpusam) == 0) error = true;
+        }
     	mpuop.error = error;
     	return mpuop;
     }
     
     public void badOperation(MPUOperationResult op) {
     	// Set flags for access violation
-    	mpuctl1 |= (1 << (op.segment-1));
+    	if(op.segment == 4) {
+    		mpuctl1 |= 1 << 5;
+    	} else {
+    		mpuctl1 |= (1 << (op.segment-1));
+    	}
     }
     
 	@Override
@@ -104,6 +119,7 @@ public class MPU extends IOUnit {
 	public void reset(int type) {
 		mpuctl0            = 0x9600;
 		mpuctl1            = 0x0;
+		mpusegb3           = 0x0;
 		mpusegb2           = 0x0;
 		mpusegb1           = 0x0;
 		mpusam             = 0x7777;
@@ -145,6 +161,9 @@ public class MPU extends IOUnit {
 	        case MPUCTL1:
 	        	mpuctl1 = value;
 	        	break;
+	        case MPUSEGB3:
+	        	mpusegb3 = value;
+	        	break;
 	        case MPUSEGB2:
 	        	mpusegb2 = value;
 	        	break;
@@ -178,6 +197,9 @@ public class MPU extends IOUnit {
 	        	value = mpuctl1;
 	        	// reset by reading
 	        	mpuctl1 = 0x0;
+	        	break;
+	        case MPUSEGB3:
+	        	value = mpusegb3;
 	        	break;
 	        case MPUSEGB2:
 	        	value = mpusegb2;

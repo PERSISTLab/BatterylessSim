@@ -1,3 +1,9 @@
+/**
+ * This MPU implementation can protect ALL memory addresses, including SRAM, FRAM, and registers, unlike the actual implementation which only protects FRAM. 
+ * We rely on user firmware to respect this constraint, or not.
+ * 
+ * @author Josiah Hester
+ */
 package se.sics.mspsim.core;
 
 import se.sics.mspsim.core.MPU.MemoryOperation;

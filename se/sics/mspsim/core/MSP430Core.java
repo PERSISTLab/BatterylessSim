@@ -300,7 +300,21 @@ private static final int COVERAGE_BUFFER_MEM = 0x82000;
         	if (address >= MAX_MEM) {
             	throw new EmulationException("Reading outside memory: 0x" + Utils.hex(address, 4));
             }
-            return memorySegments[address >> 8].read(address, mode, type);
+        	int retval = 0;
+    		// Handle MPU settings if exist and enabled
+    		if(mpu != null && mpu.mpuEnabled) {
+    			MPUOperationResult mor = mpu.isValidOperation(address, MPU.MemoryOperation.READ);
+    			if(mor.error == false) {
+    				retval = memorySegments[address >> 8].read(address, mode, type);
+    			} else {
+    				// trigger error for bad operation, and dont actually write / exec / read
+    				mpu.badOperation(mor);
+    			}
+    		} else {
+    			// No memory protection exists or is not enabled
+    			retval = memorySegments[address >> 8].read(address, mode, type);
+    		}
+            return retval;
         }
         @Override
         public void write(int address, int data, AccessMode mode) throws EmulationException {
@@ -341,9 +355,6 @@ private static final int COVERAGE_BUFFER_MEM = 0x82000;
         		// Handle MPU settings if exist and enabled
         		if(mpu != null && mpu.mpuEnabled) {
         			MPUOperationResult mor = mpu.isValidOperation(address, MPU.MemoryOperation.WRITE);
-        			if(address == 0x4401) {
-        				System.out.println("t");
-        			}
         			if(mor.error == false) {
         				memorySegments[address >> 8].write(address, data, mode);
         			} else {
@@ -1329,6 +1340,20 @@ private static final int COVERAGE_BUFFER_MEM = 0x82000;
     }
     
     int pcBefore = pc;
+    
+	// Handle MPU settings if exist and enabled
+	if(mpu != null && mpu.mpuEnabled) {
+		MPUOperationResult mor = mpu.isValidOperation(pc-2, MPU.MemoryOperation.EXECUTE);
+		if(mor.error == true) {
+			// trigger error for bad operation, and dont actually execute instruction 
+			mpu.badOperation(mor);
+			// Skip this instruction and move to next
+			previousPC+=2;
+			writeRegister(PC, previousPC);
+			return previousPC;
+		}
+	}
+	
     instruction = currentSegment.read(pc, AccessMode.WORD, AccessType.EXECUTE);
     if (isStopping) {
         // Signaled to stop the execution before performing the instruction
@@ -1399,7 +1424,7 @@ private static final int COVERAGE_BUFFER_MEM = 0x82000;
     pc += 2;
 
     writeRegister(PC, pc);
-
+	
     switch (op) {
     case 0:
         // MSP430X - additional instructions

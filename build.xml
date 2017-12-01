@@ -1,6 +1,6 @@
 <project name="MSPSim" default="jar" basedir=".">
   <description>
-     Builds MSPSim
+     Builds MSPSim / SIREN
   </description>
 
   <property name="src" location="."/>
@@ -12,7 +12,13 @@
   <property name="ant.build.javac.source" value="1.7"/>
   <property name="ant.build.javac.target" value="1.7"/>
   <property name="ARGS" value=""/>
-
+  <!-- the jar file itself -->
+  
+  <path id="libraries.path">    
+      <fileset dir="${lib}">
+          <include name="*.jar"/>
+      </fileset>
+  </path>
   <path id="classpath">
     <fileset dir="${lib}" includes="**/*.jar"/>
   </path>
@@ -32,17 +38,26 @@
     </javac>
   </target>
 
-  <target name="jar" depends="compile" description="generate MSPSim jar file" >
-    <jar jarfile="${jarfile}" basedir="${build}">
-      <manifest>
-        <attribute name="Main-Class" value="se.sics.mspsim.Main"/>
-      	<attribute name="Sealed" value="true"/>
-      	<attribute name="Class-Path" value="${jar.classpath}" />
-      </manifest>
-      <fileset dir="." includes="images/*.jpg,images/*.png"/>
-    </jar>
-  </target>
+	<target name="jar" depends="compile" description="Makes a distribution version of SIREN, into a jar file.">
+		    <mkdir dir="${dist}"/>
+		    <mkdir dir="${build}/${lib}"/>
+		    <copy todir="${build}/${lib}" flatten="true">
+		        <path refid="libraries.path"/>
+		    </copy>
 
+		    <manifestclasspath property="manifest.classpath" jarfile="${jarfile}">
+		        <classpath refid="libraries.path"/>
+		    </manifestclasspath>
+
+		    <jar destfile="${jarfile}" basedir="${build}">
+		        <manifest>
+		            <attribute name="Main-Class" value="se.sics.mspsim.Main"/>
+		            <attribute name="Class-Path" value="${manifest.classpath}"/>
+		        </manifest>
+		    	<fileset dir="." includes="images/*.jpg,images/*.png"/>
+		    </jar>  
+	</target>
+	
   <target name="runesb" depends="jar" description="run MSPSim with platform ESB">
     <property name="FIRMWAREFILE" value="firmware/esb/sensor-demo.esb"/>
     <java fork="true" classpath="${jarfile}" classname="se.sics.mspsim.platform.esb.ESBNode">
